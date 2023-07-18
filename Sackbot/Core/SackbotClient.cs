@@ -114,12 +114,11 @@ public class SackbotClient : IDisposable
         await this.Discord.StartAsync();
     }
 
-    public void AddModule<TModule>() where TModule : IModule, new()
-    {
-        this.AddModule(new TModule());
-    }
-
     public void AddModule(IModule module) => this._modules.Add(module);
+    public void AddModule<TModule>() where TModule : IModule, new() => this.AddModule(new TModule());
+
+    public TModule GetModule<TModule>() where TModule : IModule 
+        => (TModule)this._modules.First(m => m.GetType() == typeof(TModule));
 
     public void Dispose()
     {
