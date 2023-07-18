@@ -1,7 +1,8 @@
 ﻿using Newtonsoft.Json;
 using NotEnoughLogs;
 using NotEnoughLogs.Loggers;
-using Sackbot;
+using Sackbot.Core;
+using Sackbot.Modules;
 
 const string configFilename = "sackbot.json";
 string configPath = Path.Combine(Environment.CurrentDirectory, configFilename);
@@ -31,7 +32,8 @@ if (configuration == null)
 }
 
 using SackbotClient client = new(logger, configuration.Value);
-await client.Initialize();
+client.AddModule<InteractionModule>();
+client.Initialize();
 
 await client.StartAsync();
 await Task.Delay(-1);

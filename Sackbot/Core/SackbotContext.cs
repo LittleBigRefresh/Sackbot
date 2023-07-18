@@ -1,4 +1,4 @@
-namespace Sackbot;
+namespace Sackbot.Core;
 
 public enum SackbotContext
 {
