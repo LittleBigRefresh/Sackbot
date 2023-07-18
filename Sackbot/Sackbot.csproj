@@ -7,4 +7,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Discord.Net.WebSocket" Version="3.11.0" />
+      <PackageReference Include="NotEnoughLogs" Version="1.0.5" />
+    </ItemGroup>
+
 </Project>
