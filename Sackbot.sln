@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sackbot", "Sackbot\Sackbot.csproj", "{8A7C9AE8-831A-42BE-9E6C-102A59221FDF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LittleBigRefresh.Bot", "LittleBigRefresh.Bot\LittleBigRefresh.Bot.csproj", "{9C229B46-4E8A-48D8-83DE-7427BA1271CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{8A7C9AE8-831A-42BE-9E6C-102A59221FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A7C9AE8-831A-42BE-9E6C-102A59221FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A7C9AE8-831A-42BE-9E6C-102A59221FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C229B46-4E8A-48D8-83DE-7427BA1271CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C229B46-4E8A-48D8-83DE-7427BA1271CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C229B46-4E8A-48D8-83DE-7427BA1271CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C229B46-4E8A-48D8-83DE-7427BA1271CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

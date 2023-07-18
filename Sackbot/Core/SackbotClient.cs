@@ -1,7 +1,9 @@
 using Discord;
 using Discord.WebSocket;
 using Microsoft.VisualBasic.CompilerServices;
+using Newtonsoft.Json;
 using NotEnoughLogs;
+using NotEnoughLogs.Loggers;
 
 namespace Sackbot.Core;
 
@@ -65,6 +67,37 @@ public class SackbotClient : IDisposable
             return Task.CompletedTask;
         };
     }
+    
+    public static SackbotClient CreateSackbot()
+    {
+        const string configFilename = "sackbot.json";
+        string configPath = Path.Combine(Environment.CurrentDirectory, configFilename);
+
+        LoggerContainer<SackbotContext> logger = new();
+        logger.RegisterLogger(new ConsoleLogger());
+
+        SackbotConfiguration? configuration = null;
+        if (!File.Exists(configPath))
+        {
+            string exampleJson = JsonConvert.SerializeObject(SackbotConfiguration.ExampleConfiguration, Formatting.Indented);
+            File.WriteAllText(configPath, exampleJson);
+    
+            logger.LogInfo(SackbotContext.Startup, "Generated a blank config at " + configPath);
+            Environment.Exit(1);
+        }
+
+        string configText = File.ReadAllText(configPath);
+        configuration = JsonConvert.DeserializeObject<SackbotConfiguration>(configText);
+
+        // ReSharper disable once InvertIf
+        if (configuration == null)
+        {
+            logger.LogCritical(SackbotContext.Startup, "Failed to read configuration due to an unknown error. Cannot continue.");
+            Environment.Exit(1);
+        }
+
+        return new SackbotClient(logger, configuration.Value);
+    }
 
     public void Initialize()
     {
@@ -86,11 +119,12 @@ public class SackbotClient : IDisposable
         this.AddModule(new TModule());
     }
 
-    private void AddModule(IModule module) => this._modules.Add(module);
+    public void AddModule(IModule module) => this._modules.Add(module);
 
     public void Dispose()
     {
         this.Discord.Dispose();
+        this._logger.Dispose();
         GC.SuppressFinalize(this);
     }
 }

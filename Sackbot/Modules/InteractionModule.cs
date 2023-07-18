@@ -10,24 +10,29 @@ public class InteractionModule : IModule
 {
     private readonly List<ICommandInteraction> _commandInteractions = new();
     private SackbotClient _client = null!;
+
+    public void AddInteraction<TInteraction>() where TInteraction : ICommandInteraction, new()
+    {
+        this._commandInteractions.Add(new TInteraction());
+    }
     
     public void Initialize(SackbotClient client)
     {
         client.Discord.InteractionCreated += HandleInteraction;
 
-        IEnumerable<Type> commandTypes = Assembly
-            .GetExecutingAssembly()
-            .GetTypes()
-            .Where(t => t.IsAssignableTo(typeof(ICommandInteraction)) && t != typeof(ICommandInteraction));
-
-        foreach (Type commandType in commandTypes)
-        {
-            ICommandInteraction? command = (ICommandInteraction?)Activator.CreateInstance(commandType);
-            if (command == null) throw new InvalidOperationException();
-            
-            Console.WriteLine("Found command " + command.Name);
-            _commandInteractions.Add(command);
-        }
+        // IEnumerable<Type> commandTypes = Assembly
+        //     .GetExecutingAssembly()
+        //     .GetTypes()
+        //     .Where(t => t.IsAssignableTo(typeof(ICommandInteraction)) && t != typeof(ICommandInteraction));
+        //
+        // foreach (Type commandType in commandTypes)
+        // {
+        //     ICommandInteraction? command = (ICommandInteraction?)Activator.CreateInstance(commandType);
+        //     if (command == null) throw new InvalidOperationException();
+        //     
+        //     Console.WriteLine("Found command " + command.Name);
+        //     _commandInteractions.Add(command);
+        // }
 
         client.Discord.Connected += async () =>
         {
