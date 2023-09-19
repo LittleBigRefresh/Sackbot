@@ -9,7 +9,7 @@ public abstract class CommandArgument : IInteraction
 
     public bool Required { get; set; } = false;
 
-    public object GetData(SocketSlashCommand interaction)
+    protected object GetData(SocketSlashCommand interaction)
     {
         foreach (SocketSlashCommandDataOption option in interaction.Data.Options)
         {

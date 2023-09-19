@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Discord.Net.WebSocket" Version="3.11.0" />
+      <PackageReference Include="Discord.Net.WebSocket" Version="3.12.0" />
       <PackageReference Include="JetBrains.Annotations" Version="2023.2.0" />
-      <PackageReference Include="NotEnoughLogs" Version="1.0.5" />
+      <PackageReference Include="NotEnoughLogs" Version="1.1.0" />
 
     </ItemGroup>
 
