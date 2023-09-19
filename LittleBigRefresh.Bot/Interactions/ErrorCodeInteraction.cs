@@ -1,3 +1,4 @@
+using Discord;
 using Discord.WebSocket;
 using LittleBigRefresh.Bot.Wiki;
 using Sackbot.Core;
@@ -31,10 +32,17 @@ public class ErrorCodeInteraction : CommandInteraction
         ErrorCode? errorCode = errorCodeModule.ErrorCodes.FirstOrDefault(c => c.Code == code);
         if (errorCode == null)
         {
-            await interaction.RespondAsync("code does not exist");
+            await interaction.RespondAsync("Could not find an error by that code. Make sure you have typed the code properly, e.g. 0x80711009.");
             return;
         }
 
-        await interaction.RespondAsync(errorCode.ToString());
+        EmbedBuilder embed = new();
+
+        embed.WithColor(0xEE0000u);
+        embed.WithTitle($"{errorCode.Section}: {errorCode.Name}");
+        embed.WithDescription(errorCode.Description);
+        embed.WithFooter(errorCode.Code);
+
+        await interaction.RespondAsync("Found a matching error code.", embed: embed.Build());
     }
 }

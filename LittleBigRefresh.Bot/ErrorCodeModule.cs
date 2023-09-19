@@ -38,8 +38,17 @@ public class ErrorCodeModule : IModule
                     code.Code = error[1].Trim(' ');
                     code.Description = error[2].Trim(' ');
                 }
+                else if (error.Length >= 2)
+                {
+                    code.Name = error[0][2..].Trim(' ');
+                    code.Code = error[1].Trim(' ');
+                    code.Description = "No description was provided for this error.";
+                }
+                else
+                {
+                    Console.WriteLine(line);
+                }
                 
-                Console.WriteLine(code);
                 this.ErrorCodes.Add(code);
             }
         }
