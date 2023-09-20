@@ -2,7 +2,7 @@ using System.Net.Http.Json;
 using LittleBigRefresh.Bot.Wiki;
 using Sackbot.Core;
 
-namespace LittleBigRefresh.Bot;
+namespace LittleBigRefresh.Bot.Modules;
 
 public class ErrorCodeModule : IModule
 {

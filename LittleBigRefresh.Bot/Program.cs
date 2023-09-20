@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using LittleBigRefresh.Bot;
+using LittleBigRefresh.Bot.Modules;
 using Sackbot.Core;
 using Sackbot.Interactions;
 using Sackbot.Modules;
@@ -11,6 +11,7 @@ interactions.AddInteraction<HelpInteraction>();
 interactions.AddInteractionsFromAssembly(Assembly.GetExecutingAssembly());
 client.AddModule(interactions);
 client.AddModule<ErrorCodeModule>();
+client.AddModule<StatusModule>();
 
 client.Initialize();
 

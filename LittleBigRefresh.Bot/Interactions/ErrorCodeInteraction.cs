@@ -1,5 +1,6 @@
 using Discord;
 using Discord.WebSocket;
+using LittleBigRefresh.Bot.Modules;
 using LittleBigRefresh.Bot.Wiki;
 using Sackbot.Core;
 using Sackbot.Interactions;
