@@ -1,10 +1,8 @@
 using Discord;
 using Discord.WebSocket;
 using JetBrains.Annotations;
-using Microsoft.VisualBasic.CompilerServices;
 using Newtonsoft.Json;
 using NotEnoughLogs;
-using NotEnoughLogs.Loggers;
 
 namespace Sackbot.Core;
 
@@ -12,11 +10,11 @@ public class SackbotClient : IDisposable
 {
     public readonly DiscordSocketClient Discord;
     private readonly SackbotConfiguration _config;
-    private readonly LoggerContainer<SackbotContext> _logger;
+    private readonly Logger _logger;
 
     private readonly List<IModule> _modules = new();
 
-    public SackbotClient(LoggerContainer<SackbotContext> logger, SackbotConfiguration config)
+    public SackbotClient(Logger logger, SackbotConfiguration config)
     {
         DiscordSocketConfig clientConfig = new()
         {
@@ -36,30 +34,30 @@ public class SackbotClient : IDisposable
 
         this.Discord.Log += message =>
         {
-            SackbotContext context = SackbotContext.Discord;
+            SackbotCategory category = SackbotCategory.Discord;
             string msg = $"{message.Message}{message.Exception}";
 
-            if (Enum.TryParse(message.Source, out SackbotContext ctx))
-                context = ctx;
+            if (Enum.TryParse(message.Source, out SackbotCategory ctx))
+                category = ctx;
             else msg = $"{message.Source}: {msg}";
 
             switch (message.Severity)
             {
                 case LogSeverity.Critical:
-                    this._logger.LogCritical(context, msg);
+                    this._logger.LogCritical(category, msg);
                     break;
                 case LogSeverity.Error:
-                    this._logger.LogError(context, msg);
+                    this._logger.LogError(category, msg);
                     break;
                 case LogSeverity.Warning:
-                    this._logger.LogWarning(context, msg);
+                    this._logger.LogWarning(category, msg);
                     break;
                 case LogSeverity.Info:
-                    this._logger.LogInfo(context, msg);
+                    this._logger.LogInfo(category, msg);
                     break;
                 case LogSeverity.Verbose:
                 case LogSeverity.Debug:
-                    this._logger.LogDebug(context, msg);
+                    this._logger.LogDebug(category, msg);
                     break;
                 default:
                     throw new NotImplementedException(message.Severity.ToString());
@@ -74,8 +72,7 @@ public class SackbotClient : IDisposable
         const string configFilename = "sackbot.json";
         string configPath = Path.Combine(Environment.CurrentDirectory, configFilename);
 
-        LoggerContainer<SackbotContext> logger = new();
-        logger.RegisterLogger(new ConsoleLogger());
+        Logger logger = new();
 
         SackbotConfiguration? configuration = null;
         if (!File.Exists(configPath))
@@ -83,7 +80,7 @@ public class SackbotClient : IDisposable
             string exampleJson = JsonConvert.SerializeObject(SackbotConfiguration.ExampleConfiguration, Formatting.Indented);
             File.WriteAllText(configPath, exampleJson);
     
-            logger.LogInfo(SackbotContext.Startup, "Generated a blank config at " + configPath);
+            logger.LogInfo(SackbotCategory.Startup, "Generated a blank config at " + configPath);
             Environment.Exit(1);
         }
 
@@ -93,7 +90,7 @@ public class SackbotClient : IDisposable
         // ReSharper disable once InvertIf
         if (configuration == null)
         {
-            logger.LogCritical(SackbotContext.Startup, "Failed to read configuration due to an unknown error. Cannot continue.");
+            logger.LogCritical(SackbotCategory.Startup, "Failed to read configuration due to an unknown error. Cannot continue.");
             Environment.Exit(1);
         }
 
@@ -104,7 +101,7 @@ public class SackbotClient : IDisposable
     {
         foreach (IModule module in this._modules)
         {
-            this._logger.LogInfo(SackbotContext.Startup, "Initializing module " + module.GetType().Name);
+            this._logger.LogInfo(SackbotCategory.Startup, "Initializing module " + module.GetType().Name);
             module.Initialize(this);
         }
     }

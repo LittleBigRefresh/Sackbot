@@ -1,6 +1,6 @@
 namespace Sackbot.Core;
 
-public enum SackbotContext
+public enum SackbotCategory
 {
     Discord,
     Gateway,
